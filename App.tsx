@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar"
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import DayListItem from "./src/components/DayListItem"
+
+import { useFonts, Inter_900Black } from "@expo-google-fonts/inter"
+import { AmaticSC_400Regular, AmaticSC_700Bold } from "@expo-google-fonts/amatic-sc"
+import * as SplashScreen from "expo-splash-screen"
+import { useEffect } from "react"
 
 const uniqueNumbers = [5, 6, 17, 13, 18, 19, 4, 20, 14, 22, 8, 21, 23, 10, 11, 3, 24, 16, 2, 9, 1, 15, 12, 7]
 
@@ -20,25 +26,28 @@ const styles = StyleSheet.create({
   column: {
     gap: 10,
   },
-  box: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#9b4521",
-    borderRadius: 10,
-    backgroundColor: "#f9ede3",
-    padding: 10,
-    width: 70,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-    aspectRatio: 1,
-  },
-  text: {
-    color: "#9b4521",
-    fontSize: 30,
-  },
 })
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync()
+
 export default function App() {
+  let [fontsLoaded, fontError] = useFonts({
+    Inter: Inter_900Black,
+    Amatic: AmaticSC_400Regular,
+    AmaticBold: AmaticSC_700Bold,
+  })
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded, fontError])
+
+  if (!fontsLoaded && !fontError) {
+    return null
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -47,19 +56,9 @@ export default function App() {
           contentContainerStyle={styles.content}
           columnWrapperStyle={styles.column}
           data={uniqueNumbers}
-          renderItem={({ item }) => (
-            <View style={styles.box}>
-              <Text style={styles.text}>{item}</Text>
-            </View>
-          )}
+          renderItem={({ item }) => <DayListItem day={item} />}
         />
       </View>
-
-      {/* {uniqueNumbers.map((day) => (
-          <View key={day} style={styles.box}>
-            <Text style={styles.text}>{day}</Text>
-          </View>
-        ))} */}
 
       <StatusBar style="auto" />
     </SafeAreaView>
