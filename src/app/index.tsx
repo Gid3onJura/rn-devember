@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar"
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native"
-import DayListItem from "../components/DayListItem"
+import DayListItem from "@components/DayListItem"
 
 const uniqueNumbers = [5, 6, 17, 13, 18, 19, 4, 20, 14, 22, 8, 21, 23, 10, 11, 3, 24, 16, 2, 9, 1, 15, 12, 7]
 
