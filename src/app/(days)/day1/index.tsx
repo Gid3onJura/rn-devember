@@ -14,7 +14,7 @@ const DayDetailsScreen = () => {
   return (
     <View>
       <Stack.Screen options={{ title: "Day 1" }} />
-      <Text style={styles.text}>DayDetailsScreen</Text>
+      <Text style={styles.text}>Setup React Native with Expo Router</Text>
     </View>
   )
 }

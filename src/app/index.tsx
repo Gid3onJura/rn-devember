@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // gap: 10,
-    marginTop: 70,
+    marginTop: 50,
+    height: "100%",
   },
   content: {
     gap: 10,
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}>
         <FlatList
           numColumns={4}
@@ -36,7 +37,7 @@ export default function HomeScreen() {
         />
       </View>
 
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
     </SafeAreaView>
   )
 }
