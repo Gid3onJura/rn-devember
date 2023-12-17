@@ -5,6 +5,7 @@ import { FontAwesome5 } from "@expo/vector-icons"
 import { StatusBar } from "expo-status-bar"
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler"
 import Animated, { FadeIn, FadeOut, SlideInLeft, SlideOutRight } from "react-native-reanimated"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const onboardingSteps = [
   {
@@ -58,7 +59,7 @@ function OnboardingScreen() {
   }
 
   return (
-    <View style={styles.page}>
+    <SafeAreaView style={styles.page}>
       <Stack.Screen options={{ title: "", headerShown: false }} />
       <StatusBar style="light" />
 
@@ -73,7 +74,7 @@ function OnboardingScreen() {
 
       {/* page content */}
       <GestureDetector gesture={swipes}>
-        <View style={styles.pageContent}>
+        <View style={styles.pageContent} key={screenIndex}>
           <Animated.View entering={FadeIn} exiting={FadeOut}>
             <FontAwesome5 style={styles.image} name={data.icon} size={100} color="#FFDA11" />
           </Animated.View>
@@ -99,73 +100,75 @@ function OnboardingScreen() {
           </View>
         </View>
       </GestureDetector>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  stepIndicatorContainer: {
-    flexDirection: "row",
-    gap: 5,
-    marginHorizontal: 15,
-    marginTop: 40,
-  },
-  stepIndicator: {
+  page: {
+    // alignItems: 'center',
+    justifyContent: "center",
     flex: 1,
-    height: 3,
-    backgroundColor: "gray",
-    borderRadius: 10,
+    backgroundColor: "#15141A",
   },
   pageContent: {
-    flex: 1,
-  },
-  page: {
-    flex: 1,
-    // alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#15141A",
     padding: 20,
-  },
-  title: {
-    color: "#FDFDFD",
-    fontSize: 50,
-    fontWeight: "700",
-    fontFamily: "InterSemi",
-    letterSpacing: 1.3,
-    marginVertical: 20,
-  },
-  description: {
-    color: "gray",
-    fontSize: 18,
-    fontFamily: "Inter",
-    lineHeight: 25,
+    flex: 1,
   },
   image: {
     alignSelf: "center",
     margin: 20,
     marginTop: 70,
   },
+  title: {
+    color: "#FDFDFD",
+    fontSize: 50,
+    fontFamily: "Inter",
+    letterSpacing: 1.3,
+    marginVertical: 10,
+  },
+  description: {
+    color: "gray",
+    fontSize: 20,
+    fontFamily: "Inter",
+    lineHeight: 28,
+  },
   footer: {
     marginTop: "auto",
   },
-  button: {
-    backgroundColor: "#302e38",
-    borderRadius: 50,
-    alignItems: "center",
-    flex: 1,
-  },
+
   buttonsRow: {
     marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
   },
+  button: {
+    backgroundColor: "#302E38",
+    borderRadius: 50,
+    alignItems: "center",
+    flex: 1,
+  },
   buttonText: {
     color: "#FDFDFD",
     fontFamily: "InterSemi",
     fontSize: 16,
+
     padding: 15,
     paddingHorizontal: 25,
+  },
+
+  // steps
+  stepIndicatorContainer: {
+    flexDirection: "row",
+    gap: 8,
+    marginHorizontal: 15,
+  },
+  stepIndicator: {
+    flex: 1,
+    height: 3,
+    backgroundColor: "gray",
+    borderRadius: 10,
   },
 })
 
