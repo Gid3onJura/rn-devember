@@ -3,6 +3,7 @@ import React from "react"
 
 import { useFonts, Inter_900Black, Inter_600SemiBold, Inter_400Regular } from "@expo-google-fonts/inter"
 import { AmaticSC_400Regular, AmaticSC_700Bold } from "@expo-google-fonts/amatic-sc"
+import { Roboto_400Regular, Roboto_700Bold } from "@expo-google-fonts/roboto"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -17,6 +18,8 @@ export default function RootLaylout() {
     InterRegular: Inter_400Regular,
     Amatic: AmaticSC_400Regular,
     AmaticBold: AmaticSC_700Bold,
+    Roboto: Roboto_400Regular,
+    RobotoBold: Roboto_700Bold,
   })
 
   useEffect(() => {
