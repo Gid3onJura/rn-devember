@@ -1,4 +1,5 @@
-import React from "react"
+import MarkdownDisplay from "@/components/day3/MarkdownDisplay"
+import React, { useState } from "react"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import Markdown from "react-native-markdown-display"
 
@@ -47,12 +48,10 @@ Markdown is not just for formatting; it's for having fun while expressing yourse
 > Enjoy crafting your own fun markdown documents! 🎨🎉
 `
 
-function EditorScreen() {
-  return (
-    <ScrollView style={styles.page} contentInsetAdjustmentBehavior="automatic">
-      <Markdown style={markdownStyles}>{template}</Markdown>
-    </ScrollView>
-  )
+const EditorScreen = () => {
+  const [content, setContent] = useState(template)
+
+  return <MarkdownDisplay>{content}</MarkdownDisplay>
 }
 
 const markdownStyles = StyleSheet.create({
