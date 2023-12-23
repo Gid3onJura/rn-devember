@@ -20,6 +20,7 @@ export default function RootLaylout() {
     AmaticBold: AmaticSC_700Bold,
     Roboto: Roboto_400Regular,
     RobotoBold: Roboto_700Bold,
+    Courier: Inter_400Regular,
   })
 
   useEffect(() => {
