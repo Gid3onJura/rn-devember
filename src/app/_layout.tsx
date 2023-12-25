@@ -8,6 +8,7 @@ import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import AnimatedSplashScreen from "@/components/AnimatedSplashScreen"
+import Animated, { FadeIn } from "react-native-reanimated"
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -38,7 +39,9 @@ export default function RootLaylout() {
   //   return null
   // }
 
-  if (!appReady || !splashAnimationFinish) {
+  const showAnimatedSplashScreen = !appReady || !splashAnimationFinish
+
+  if (showAnimatedSplashScreen) {
     return (
       <AnimatedSplashScreen
         onAnimationFinish={(isCancelled) => {
@@ -52,14 +55,16 @@ export default function RootLaylout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{}}>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "DEVember",
-          }}
-        />
-      </Stack>
+      <Animated.View style={{ flex: 1 }} entering={FadeIn}>
+        <Stack screenOptions={{}}>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "DEVember",
+            }}
+          />
+        </Stack>
+      </Animated.View>
     </GestureHandlerRootView>
   )
 }

@@ -1,6 +1,9 @@
 import React, { useRef } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
+import Animated, { FadeIn, FadeOut, ZoomIn, ZoomOut } from "react-native-reanimated"
+
+const AnimatedLottieView = Animated.createAnimatedComponent(LottieView)
 
 const AnimatedSplashScreen = ({
   onAnimationFinish = (isCancelled) => {},
@@ -9,8 +12,9 @@ const AnimatedSplashScreen = ({
 }) => {
   const animation = useRef<LottieView>(null)
   return (
-    <View style={styles.page}>
-      <LottieView
+    <Animated.View style={styles.page}>
+      <AnimatedLottieView
+        exiting={ZoomOut}
         autoPlay
         onAnimationFinish={onAnimationFinish}
         loop={false}
@@ -22,7 +26,7 @@ const AnimatedSplashScreen = ({
         // Find more Lottie files at https://lottiefiles.com/featured
         source={require("@assets/lottie/netflix.json")}
       />
-    </View>
+    </Animated.View>
   )
 }
 
