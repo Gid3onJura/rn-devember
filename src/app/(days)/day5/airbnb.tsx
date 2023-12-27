@@ -5,16 +5,22 @@ import MapView, { Marker } from "react-native-maps"
 import apartments from "@assets/data/apartments.json"
 import CustomMarker from "@/components/CustomMarker"
 import ApartmentListItem from "@/components/ApartmentListItem"
-import BottomSheet from "@gorhom/bottom-sheet"
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 export default function AirbnbScreen() {
   const [selectedApartment, setSelectedApartment] = useState(null)
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 51.4802731,
+    longitude: 11.9418525,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  })
 
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null)
 
   // variables
-  const snapPoints = useMemo(() => ["25%", "50%"], [])
+  const snapPoints = useMemo(() => [65, "25%", "50%", "90%"], [])
 
   // callbacks
   const handleSheetChanges = useCallback((index: number) => {
@@ -33,12 +39,8 @@ export default function AirbnbScreen() {
         showsPointsOfInterest={false}
         provider="google"
         style={styles.map}
-        initialRegion={{
-          latitude: 51.4802731,
-          longitude: 11.9418525,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        // initialRegion={mapRegion}
+        region={mapRegion}
       >
         {apartments.map((marker) => (
           <CustomMarker
@@ -51,21 +53,18 @@ export default function AirbnbScreen() {
         ))}
       </MapView>
 
-      {selectedApartment && (
-        <View>
-          <ApartmentListItem apartment={selectedApartment} containerStyle={styles.contaierStyle} />
-        </View>
-      )}
+      {selectedApartment && <ApartmentListItem apartment={selectedApartment} containerStyle={styles.contaierStyle} />}
 
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        enablePanDownToClose
+        // enablePanDownToClose
       >
         <View style={styles.contentContainer}>
-          <FlatList
+          <Text style={styles.listTitle}>Over {apartments.length} places</Text>
+          <BottomSheetFlatList
             data={apartments}
             renderItem={({ item }) => <ApartmentListItem apartment={item} />}
             contentContainerStyle={{ gap: 10, padding: 10 }}
@@ -101,8 +100,14 @@ const styles = StyleSheet.create({
   },
   contaierStyle: {
     position: "absolute",
-    bottom: 70,
+    bottom: 80,
     left: 10,
     right: 10,
+  },
+  listTitle: {
+    textAlign: "center",
+    fontFamily: "InterBold",
+    fontSize: 16,
+    marginBottom: 20,
   },
 })

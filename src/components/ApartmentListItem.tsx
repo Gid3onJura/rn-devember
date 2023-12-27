@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   },
   ratingContainer: {
     flexDirection: "row",
+    alignItems: "center",
   },
   rating: {
     marginLeft: 3,
