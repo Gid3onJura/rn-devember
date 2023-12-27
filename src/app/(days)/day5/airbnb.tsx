@@ -1,11 +1,25 @@
 import { Stack } from "expo-router"
-import React from "react"
-import { StyleSheet, Text, View } from "react-native"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 import MapView, { Marker } from "react-native-maps"
-import appartments from "@assets/data/appartments.json"
+import apartments from "@assets/data/apartments.json"
 import CustomMarker from "@/components/CustomMarker"
+import ApartmentListItem from "@/components/ApartmentListItem"
+import BottomSheet from "@gorhom/bottom-sheet"
 
 export default function AirbnbScreen() {
+  const [selectedApartment, setSelectedApartment] = useState(null)
+
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null)
+
+  // variables
+  const snapPoints = useMemo(() => ["25%", "50%"], [])
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log("handleSheetChanges", index)
+  }, [])
   return (
     <View style={styles.page}>
       <Stack.Screen options={{ headerShown: false }} />
@@ -26,10 +40,38 @@ export default function AirbnbScreen() {
           longitudeDelta: 0.0421,
         }}
       >
-        {appartments.map((marker) => (
-          <CustomMarker key={marker.id} marker={marker} />
+        {apartments.map((marker) => (
+          <CustomMarker
+            key={marker.id}
+            marker={marker}
+            onPress={() => {
+              setSelectedApartment(marker)
+            }}
+          />
         ))}
       </MapView>
+
+      {selectedApartment && (
+        <View>
+          <ApartmentListItem apartment={selectedApartment} containerStyle={styles.contaierStyle} />
+        </View>
+      )}
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        enablePanDownToClose
+      >
+        <View style={styles.contentContainer}>
+          <FlatList
+            data={apartments}
+            renderItem={({ item }) => <ApartmentListItem apartment={item} />}
+            contentContainerStyle={{ gap: 10, padding: 10 }}
+          />
+        </View>
+      </BottomSheet>
     </View>
   )
 }
@@ -53,5 +95,14 @@ const styles = StyleSheet.create({
   markertext: {
     fontSize: 17,
     fontFamily: "InterSemi",
+  },
+  contentContainer: {
+    flex: 1,
+  },
+  contaierStyle: {
+    position: "absolute",
+    bottom: 70,
+    left: 10,
+    right: 10,
   },
 })

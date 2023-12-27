@@ -20,6 +20,7 @@ export default function RootLaylout() {
   const [fontsLoaded, fontError] = useFonts({
     Inter: Inter_400Regular,
     InterSemi: Inter_600SemiBold,
+    InterBold: Inter_900Black,
     InterRegular: Inter_400Regular,
     Amatic: AmaticSC_400Regular,
     AmaticBold: AmaticSC_700Bold,

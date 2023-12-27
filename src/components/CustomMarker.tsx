@@ -1,28 +1,16 @@
 import { View, Text, StyleSheet } from "react-native"
 import React from "react"
 import { Marker } from "react-native-maps"
+import apartment from "@assets/data/apartments.json"
 
 interface CustomMarkerProps {
-  marker: {
-    id: number
-    latitude: number
-    longitude: number
-    description: string
-    title: string
-    numberOfStars: number
-    price: number
-    rating: number
-    image: string
-  }
+  marker: (typeof apartment)[0]
+  onPress: any
 }
 
-const CustomMarker = ({ marker }: CustomMarkerProps) => {
+const CustomMarker = ({ marker, onPress }: CustomMarkerProps) => {
   return (
-    <Marker
-      coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-      title={marker.title}
-      description={marker.description}
-    >
+    <Marker onPress={onPress} coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}>
       <View style={styles.marker}>
         <Text style={styles.markertext}>$ {marker.price}</Text>
       </View>

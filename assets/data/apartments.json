@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "latitude": 51.4802731,
+    "latitude": 51.502731,
     "longitude": 11.9418525,
     "description": "Cozy Studio in Downtown SF",
     "title": "Cozy Studio in Downtown SF",
@@ -16,8 +16,8 @@
     "longitude": 11.9318525,
     "description": "Modern Apartment",
     "title": "Modern Apartment Near Golden Gate Park",
-    "numberOfStars": 4,
-    "price": 160,
+    "numberOfStars": 5,
+    "price": 180,
     "rating": 4.5,
     "image": "https://media.cntraveler.com/photos/5d112d50c4d7bd806dbc00a4/16:9/w_2560%2Cc_limit/airbnb%2520luxe.jpg"
   },
@@ -27,8 +27,8 @@
     "longitude": 11.9218525,
     "description": "Charming Victorian",
     "title": "Charming Victorian Flat in Mission District",
-    "numberOfStars": 3,
-    "price": 160,
+    "numberOfStars": 5,
+    "price": 210,
     "rating": 4.2,
     "image": "https://a0.muscache.com/pictures/27c09c24-e29d-4cd9-8c28-edfa84868da4.jpg"
   },
@@ -39,7 +39,7 @@
     "description": "Luxury Loft",
     "title": "Luxury Loft in Financial District",
     "numberOfStars": 5,
-    "price": 160,
+    "price": 150,
     "rating": 4.9,
     "image": "https://a0.muscache.com/im/pictures/b61ba60e-7b9e-48b5-9036-aacc2579a39d.jpg"
   },
@@ -49,8 +49,8 @@
     "longitude": 11.9718525,
     "description": "Spacious 2-Bedroom",
     "title": "Spacious 2-Bedroom in Sunset District",
-    "numberOfStars": 4,
-    "price": 160,
+    "numberOfStars": 5,
+    "price": 180,
     "rating": 4.6,
     "image": "https://pyxis.nymag.com/v1/imgs/5f1/db3/bce7fbac042b55a47b4d4260428262c17d-23-private-swimming-hole-cornwall-ct.rsquare.w600.jpg"
   }
