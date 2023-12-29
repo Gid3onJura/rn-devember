@@ -106,7 +106,7 @@ const WeatherAppScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, alignItems: "center", marginTop: 28 }}>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text style={styles.locationName}>{fetchedWeather.name}</Text>
         <Text style={styles.temp}>{Math.round(fetchedWeather.main.temp)}&deg;</Text>
       </View>
@@ -119,6 +119,7 @@ const WeatherAppScreen = () => {
           flexGrow: 0,
           height: 200,
           marginBottom: 40,
+          paddingHorizontal: 10,
         }}
         contentContainerStyle={{ gap: 10, height: 150 }}
         renderItem={({ item }) => <ForecastItem forecast={item} />}
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
   },
   locationName: {
     fontFamily: "Inter",
-    fontSize: 50,
+    fontSize: 40,
   },
   temp: {
     fontFamily: "InterBold",
-    fontSize: 70,
+    fontSize: 100,
     color: "gray",
   },
 })

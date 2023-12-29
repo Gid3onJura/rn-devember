@@ -1,11 +1,17 @@
 import { View, Text, StyleSheet } from "react-native"
 import React from "react"
 import { Forecast } from "@/app/(days)/day8/weather"
+import dayjs from "dayjs"
+
+dayjs.locale("de")
+
+console.log("locale:", dayjs.locale())
 
 const ForecastItem = ({ forecast }: { forecast: Forecast }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.temp}>{Math.round(forecast.main.temp)}&deg;</Text>
+      <Text style={styles.date}>{dayjs(forecast.dt * 1000).format("dddd DD.MM.YY hh:mm a")}</Text>
     </View>
   )
 }
@@ -25,12 +31,12 @@ const styles = StyleSheet.create({
   temp: {
     fontFamily: "InterBold",
     fontSize: 35,
-    color: "gray",
+    color: "black",
     marginVertical: 10,
   },
   date: {
     fontFamily: "Inter",
-    color: "ghostwhite",
+    color: "gray",
     fontSize: 16,
   },
 })
