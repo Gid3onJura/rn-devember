@@ -1,7 +1,10 @@
-import { View, Text, ActivityIndicator, StyleSheet, FlatList } from "react-native"
+import { View, Text, ActivityIndicator, StyleSheet, FlatList, ImageBackground } from "react-native"
 import React, { useEffect, useState } from "react"
 import * as Location from "expo-location"
 import ForecastItem from "@/components/ForecastItem"
+import { Stack } from "expo-router"
+import LottieView from "lottie-react-native"
+import { StatusBar } from "expo-status-bar"
 
 type MainWeather = {
   temp: number
@@ -35,7 +38,9 @@ export type Forecast = {
 type Forcast = {}
 
 const BASE_URL = `https://api.openweathermap.org/data/2.5`
-const API_KEY = process.env.EXPO_PUBLIC_OPEN_WEATHER_KEY
+const OPEN_WEATHER_KEY = process.env.EXPO_PUBLIC_OPEN_WEATHER_KEY
+const UNSPLASH_ACCESS_KEY = process.env.EXPO_PUBLIC_UNSPLASH_ACCESS_KEY
+const bgImage = "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-images/1.jpg"
 
 // api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}&appid={API key}
 
@@ -44,6 +49,8 @@ const WeatherAppScreen = () => {
   const [location, setLocation] = useState<Location.LocationObject>()
   const [fetchedWeather, setFetchedWeather] = useState<Weather>()
   const [fetchedForcast, setFetchedForcast] = useState<Forcast[]>()
+  const [weatherIcon, setWeatherIcon] = useState()
+  const [fetchedImage, setFetchedImage] = useState(null)
 
   useEffect(() => {
     if (location) {
@@ -74,12 +81,25 @@ const WeatherAppScreen = () => {
     const lon = location?.coords.longitude
 
     // fetch data
-    const responseFromApi = await fetch(`${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`)
+    const responseFromApi = await fetch(
+      `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_KEY}&units=metric`
+    )
     const data = await responseFromApi.json()
 
     // save fetched data
     if (data) {
       setFetchedWeather(data)
+
+      if (data.weather[0].main === "Rain") {
+        setWeatherIcon(require("@assets/lottie/rain.json"))
+      } else if (data.weather[0].main === "Clouds") {
+        setWeatherIcon(require("@assets/lottie/clouds.json"))
+      } else {
+        setWeatherIcon(require("@assets/lottie/sunny.json"))
+      }
+
+      // get background image
+      fetchLocationImage(data.name)
     }
   }
 
@@ -91,7 +111,9 @@ const WeatherAppScreen = () => {
     const lon = location?.coords.longitude
 
     // fetch data
-    const responseFromApi = await fetch(`${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`)
+    const responseFromApi = await fetch(
+      `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_KEY}&units=metric`
+    )
     const data = await responseFromApi.json()
 
     // save fetched data
@@ -100,13 +122,48 @@ const WeatherAppScreen = () => {
     }
   }
 
-  if (!fetchedWeather || !fetchedForcast) {
+  const fetchLocationImage = async (locationName: string) => {
+    // fetch data
+    if (locationName) {
+      const responseFromApi = await fetch(
+        `https://api.unsplash.com/search/photos?page=1&query=${encodeURI(
+          locationName
+        )}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=1&orientation=portrait`
+      )
+
+      const data = await responseFromApi.json()
+
+      // save fetched data
+      if (data && data.results) {
+        setFetchedImage(data.results[0].urls.regular)
+      }
+    }
+  }
+
+  if (!fetchedWeather && !fetchedForcast && !fetchedImage) {
     return <ActivityIndicator />
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={fetchedImage ? { uri: fetchedImage } : { uri: bgImage }} style={styles.container}>
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
+      />
+
+      <Stack.Screen options={{ headerShown: false }} />
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <LottieView
+          source={weatherIcon}
+          style={{
+            width: 200,
+            aspectRatio: 1,
+          }}
+          loop
+          autoPlay
+        />
         <Text style={styles.locationName}>{fetchedWeather.name}</Text>
         <Text style={styles.temp}>{Math.round(fetchedWeather.main.temp)}&deg;</Text>
       </View>
@@ -124,7 +181,8 @@ const WeatherAppScreen = () => {
         contentContainerStyle={{ gap: 10, height: 150 }}
         renderItem={({ item }) => <ForecastItem forecast={item} />}
       />
-    </View>
+      <StatusBar style="light" />
+    </ImageBackground>
   )
 }
 
@@ -132,17 +190,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    justifyContent: "center",
     alignItems: "center",
   },
   locationName: {
     fontFamily: "Inter",
-    fontSize: 40,
+    fontSize: 30,
+    color: "lightgray",
   },
   temp: {
     fontFamily: "InterBold",
-    fontSize: 100,
-    color: "gray",
+    fontSize: 150,
+    color: "#FEFEFE",
   },
 })
 

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native"
 import React from "react"
 import { Forecast } from "@/app/(days)/day8/weather"
 import dayjs from "dayjs"
+import { BlurView } from "expo-blur"
 
 dayjs.locale("de")
 
@@ -9,10 +10,10 @@ console.log("locale:", dayjs.locale())
 
 const ForecastItem = ({ forecast }: { forecast: Forecast }) => {
   return (
-    <View style={styles.container}>
+    <BlurView intensity={30} style={styles.container}>
       <Text style={styles.temp}>{Math.round(forecast.main.temp)}&deg;</Text>
       <Text style={styles.date}>{dayjs(forecast.dt * 1000).format("dddd DD.MM.YY hh:mm a")}</Text>
-    </View>
+    </BlurView>
   )
 }
 
@@ -26,17 +27,16 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderColor: "gainsboro",
     borderWidth: StyleSheet.hairlineWidth,
-    backgroundColor: "ghostwhite",
   },
   temp: {
-    fontFamily: "InterBold",
+    fontFamily: "Inter",
     fontSize: 35,
-    color: "black",
+    color: "white",
     marginVertical: 10,
   },
   date: {
     fontFamily: "Inter",
-    color: "gray",
+    color: "ghostwhite",
     fontSize: 16,
   },
 })
