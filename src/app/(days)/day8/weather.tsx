@@ -140,7 +140,7 @@ const WeatherAppScreen = () => {
     }
   }
 
-  if (!fetchedWeather && !fetchedForcast && !fetchedImage) {
+  if (!fetchedWeather || !fetchedForcast || !fetchedImage) {
     return <ActivityIndicator />
   }
 
