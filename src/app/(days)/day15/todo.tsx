@@ -4,6 +4,7 @@ import { Stack } from "expo-router"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import NewTaskInput from "@/components/NewTaskInput"
 import { SafeAreaView } from "react-native-safe-area-context"
+import TaskListItem from "@/components/TaskListItem"
 
 export type Task = {
   title: string
@@ -48,6 +49,14 @@ const TodoScreen = () => {
     })
   }
 
+  const deleteTask = (index: number) => {
+    setTasks((currentTasks) => {
+      const updatedTasks = [...currentTasks]
+      updatedTasks.splice(index, 1)
+      return updatedTasks
+    })
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,16 +71,7 @@ const TodoScreen = () => {
         }}
         data={tasks}
         renderItem={({ item, index }) => (
-          <Pressable onPress={() => onItemPressed(index)} style={styles.taskContainer}>
-            <MaterialCommunityIcons
-              name={item.isFinished ? "checkbox-marked-outline" : "checkbox-blank-outline"}
-              size={24}
-              color="dimgray"
-            />
-            <Text style={[styles.taskTitle, { textDecorationLine: item.isFinished ? "line-through" : "none" }]}>
-              {item.title}
-            </Text>
-          </Pressable>
+          <TaskListItem task={item} onItemPressed={() => onItemPressed(index)} onDelete={() => deleteTask(index)} />
         )}
         ListFooterComponent={() => (
           <NewTaskInput onAdd={(newTodo: Task) => setTasks((currentTask) => [...currentTask, newTodo])} />
@@ -96,13 +96,7 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontFamily: "Inter",
     fontSize: 16,
-    color: "#303137",
-    flex: 1,
-  },
-  input: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    color: "#303137",
+    // color: "#303137",
     flex: 1,
   },
 })

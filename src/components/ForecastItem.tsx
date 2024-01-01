@@ -6,8 +6,6 @@ import { BlurView } from "expo-blur"
 
 dayjs.locale("de")
 
-console.log("locale:", dayjs.locale())
-
 const ForecastItem = ({ forecast }: { forecast: Forecast }) => {
   return (
     <BlurView intensity={30} style={styles.container}>

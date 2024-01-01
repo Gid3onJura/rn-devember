@@ -40,12 +40,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
-  taskTitle: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    color: "#303137",
-    flex: 1,
-  },
   input: {
     fontFamily: "Inter",
     fontSize: 16,
