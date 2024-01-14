@@ -52,10 +52,18 @@ const dummyTasks: Task[] = [
 const TodoScreen = () => {
   const [tasks, setTasks] = useState<Task[]>(dummyTasks)
   const [searchBarQuery, setSearchBarQuery] = useState("")
+  const [tab, setTab] = useState<"A" | "T" | "F">("A")
 
   const headerHeight = useHeaderHeight()
 
   const filteredTasks = tasks.filter((task) => {
+    if (task.isFinished && tab === "T") {
+      return false
+    }
+    if (!task.isFinished && tab === "F") {
+      return false
+    }
+
     if (!searchBarQuery) {
       return true
     }
@@ -104,9 +112,9 @@ const TodoScreen = () => {
             justifyContent: "space-around",
           }}
         >
-          <Button title="All" onPress={() => setTab("All")} />
-          <Button title="Todo" onPress={() => setTab("Todo")} />
-          <Button title="Finished" onPress={() => setTab("Finished")} />
+          <Button title="Alle" onPress={() => setTab("A")} />
+          <Button title="Todo" onPress={() => setTab("T")} />
+          <Button title="Abgeschlossen" onPress={() => setTab("F")} />
         </View>
 
         <FlatList
@@ -119,9 +127,11 @@ const TodoScreen = () => {
           renderItem={({ item, index }) => (
             <TaskListItem task={item} onItemPressed={() => onItemPressed(index)} onDelete={() => deleteTask(index)} />
           )}
-          ListFooterComponent={() => (
-            <NewTaskInput onAdd={(newTodo: Task) => setTasks((currentTask) => [...currentTask, newTodo])} />
-          )}
+          ListFooterComponent={() => {
+            if (tab === "A" || tab === "T") {
+              return <NewTaskInput onAdd={(newTodo: Task) => setTasks((currentTask) => [...currentTask, newTodo])} />
+            }
+          }}
         />
       </SafeAreaView>
     </KeyboardAvoidingView>
