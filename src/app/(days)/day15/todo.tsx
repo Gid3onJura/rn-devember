@@ -1,10 +1,21 @@
-import { View, Text, StyleSheet, FlatList, Pressable, TextInput, KeyboardAvoidingView, Platform } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Button,
+} from "react-native"
 import React, { useState } from "react"
 import { Stack } from "expo-router"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import NewTaskInput from "@/components/NewTaskInput"
 import { SafeAreaView } from "react-native-safe-area-context"
 import TaskListItem from "@/components/TaskListItem"
+import { useHeaderHeight } from "@react-navigation/elements"
 
 export type Task = {
   title: string
@@ -40,6 +51,17 @@ const dummyTasks: Task[] = [
 
 const TodoScreen = () => {
   const [tasks, setTasks] = useState<Task[]>(dummyTasks)
+  const [searchBarQuery, setSearchBarQuery] = useState("")
+
+  const headerHeight = useHeaderHeight()
+
+  const filteredTasks = tasks.filter((task) => {
+    if (!searchBarQuery) {
+      return true
+    }
+
+    return task.title.toLocaleLowerCase().trim().includes(searchBarQuery.toLocaleLowerCase().trim())
+  })
 
   const onItemPressed = (index: number) => {
     setTasks((currentTasks) => {
@@ -63,20 +85,45 @@ const TodoScreen = () => {
       style={styles.taskContainer}
       keyboardVerticalOffset={120}
     >
-      <Stack.Screen options={{ title: "TODO" }} />
-
-      <FlatList
-        contentContainerStyle={{
-          gap: 10,
+      <Stack.Screen
+        options={{
+          title: "TODO",
+          headerBackTitleVisible: false,
+          headerSearchBarOptions: {
+            hideWhenScrolling: true,
+            onChangeText: (event) => setSearchBarQuery(event.nativeEvent.text),
+          },
         }}
-        data={tasks}
-        renderItem={({ item, index }) => (
-          <TaskListItem task={item} onItemPressed={() => onItemPressed(index)} onDelete={() => deleteTask(index)} />
-        )}
-        ListFooterComponent={() => (
-          <NewTaskInput onAdd={(newTodo: Task) => setTasks((currentTask) => [...currentTask, newTodo])} />
-        )}
       />
+
+      <SafeAreaView edges={["bottom"]} style={{ flex: 1, paddingTop: headerHeight + 35 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 20,
+            justifyContent: "space-around",
+          }}
+        >
+          <Button title="All" onPress={() => setTab("All")} />
+          <Button title="Todo" onPress={() => setTab("Todo")} />
+          <Button title="Finished" onPress={() => setTab("Finished")} />
+        </View>
+
+        <FlatList
+          data={filteredTasks}
+          keyExtractor={(item) => item.title}
+          contentContainerStyle={{
+            gap: 10,
+            padding: 10,
+          }}
+          renderItem={({ item, index }) => (
+            <TaskListItem task={item} onItemPressed={() => onItemPressed(index)} onDelete={() => deleteTask(index)} />
+          )}
+          ListFooterComponent={() => (
+            <NewTaskInput onAdd={(newTodo: Task) => setTasks((currentTask) => [...currentTask, newTodo])} />
+          )}
+        />
+      </SafeAreaView>
     </KeyboardAvoidingView>
   )
 }
